@@ -11,7 +11,7 @@ pipeline = pipeline.to("cpu")
 def upscale(low_res_img, prompt):
  low_res_img = Image.open(low_res_img).convert("RGB")
  low_res_img = low_res_img.resize((128, 128))
- upscaled_image = pipeline(prompt=prompt, image=low_res_img, guidance_scale=1).images[0]
+ upscaled_image = pipeline(prompt=prompt, image=low_res_img, guidance_scale=1, num_inference_steps=50).images[0]
  upscaled_image.save("upsampled.png")
  return upscaled_image
 #launch interface
