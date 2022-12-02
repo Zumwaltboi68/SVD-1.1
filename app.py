@@ -3,15 +3,16 @@ from PIL import Image
 from io import BytesIO
 from diffusers import StableDiffusionUpscalePipeline
 import gradio as gr
-# load model and scheduler
+# load model for CPU or GPU
 model_id = "stabilityai/stable-diffusion-x4-upscaler"
-pipeline = StableDiffusionUpscalePipeline.from_pretrained(model_id)
-pipeline = pipeline.to("cpu")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+pipe = StableDiffusionUpscalePipeline.from_pretrained(model_id, torch_dtype=torch.float16, revision="fp16") if torch.cuda.is_available() else StableDiffusionUpscalePipeline.from_pretrained(model_id)
+pipe = pipe.to(device)
 #define interface 
 def upscale(low_res_img, prompt):
  low_res_img = Image.open(low_res_img).convert("RGB")
  low_res_img = low_res_img.resize((128, 128))
- upscaled_image = pipeline(prompt=prompt, image=low_res_img, guidance_scale=1, num_inference_steps=50).images[0]
+ upscaled_image = pipe(prompt=prompt, image=low_res_img, guidance_scale=1, num_inference_steps=50).images[0]
  upscaled_image.save("upsampled.png")
  return upscaled_image
 #launch interface
