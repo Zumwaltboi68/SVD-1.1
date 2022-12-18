@@ -1,5 +1,5 @@
 ---
-title: SD 2.0 4X Upscaler CPU
+title: SD 2.0 4X Upscaler
 emoji: ⚡
 colorFrom: yellow
 colorTo: indigo
