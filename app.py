@@ -11,7 +11,7 @@ pipe = pipe.to(device)
 #define interface 
 def upscale(low_res_img, prompt, negative_prompt, scale, steps):
  low_res_img = Image.open(low_res_img).convert("RGB")
- low_res_img = low_res_img.resize((128, 128))
+ low_res_img = low_res_img.resize((256, 256))
  upscaled_image = pipe(prompt=prompt, negative_prompt=negative_prompt, image=low_res_img, guidance_scale=scale, num_inference_steps=steps).images[0]
  #upscaled_image.save("upsampled.png")
  return upscaled_image
