@@ -26,7 +26,7 @@ def upscale(raw_img, model, prompt, negative_prompt, scale, steps):
     else: 
         low_res_img = raw_img.resize((128, 128))
         upscaled_image = upscaler2x(prompt=prompt, negative_prompt=negative_prompt, image=raw_img, guidance_scale=scale, num_inference_steps=steps).images[0]
-        return upscaled_image
+    return upscaled_image
     
 #launch interface
     
