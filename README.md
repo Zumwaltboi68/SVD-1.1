@@ -1,5 +1,5 @@
 ---
-title: SD 2.0 4X Upscaler
+title: SD 2X & 4X Upscaler
 emoji: ⚡
 colorFrom: green
 colorTo: indigo
