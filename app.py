@@ -11,7 +11,7 @@ import modin.pandas as pd
 model_2x = "stabilityai/sd-x2-latent-upscaler"
 model_4x = "stabilityai/stable-diffusion-x4-upscaler"
 device = "cuda" if torch.cuda.is_available() else "cpu"
-upscaler2x = StableDiffusionLatentUpscalePipeline.from_pretrained(model_2x, torch_dtype=torch.float16, revision="fp16") if torch.cuda.is_available() else StableDiffusionLatentUpscalePipeline.from_pretrained(model_2x)
+upscaler2x = StableDiffusionLatentUpscalePipeline.from_pretrained(model_2x, torch_dtype=torch.float16) if torch.cuda.is_available() else StableDiffusionLatentUpscalePipeline.from_pretrained(model_2x)
 upscaler4x = StableDiffusionUpscalePipeline.from_pretrained(model_4x, torch_dtype=torch.float16, revision="fp16") if torch.cuda.is_available() else StableDiffusionUpscalePipeline.from_pretrained(model_4x)
 
 #define interface 
