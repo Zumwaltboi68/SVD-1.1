@@ -21,12 +21,12 @@ upscaler4x = upscaler4x.to(device)
 def upscale(raw_img, model, prompt, negative_prompt, scale, steps):
     generator = torch.manual_seed(999999)
     low_res_img = Image.open(raw_img).convert("RGB")
-    if model == "Upscaler 2x":
-        image = upscaler2x(prompt=prompt, negative_prompt=negative_prompt, image=low_res_img, guidance_scale=scale, num_inference_steps=steps).images[0] 
-    else: 
+    if model == "Upscaler 4x":
         low_res_img = low_res_img.resize((128, 128))
         image = upscaler4x(prompt=prompt, negative_prompt=negative_prompt, image=low_res_img, guidance_scale=scale, num_inference_steps=steps).images[0]
-    return image
+    else:
+        image = upscaler2x(prompt=prompt, negative_prompt=negative_prompt, image=low_res_img, guidance_scale=scale, num_inference_steps=steps).images[0] 
+        return image
     
 #launch interface
     
