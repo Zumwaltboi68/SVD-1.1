@@ -18,8 +18,8 @@ upscaler4x = upscaler4x.to(device)
 
 #define interface 
 
-def upscale(raw_img, model, prompt, negative_prompt, scale, steps):
-    generator = torch.manual_seed(999999)
+def upscale(raw_img, model, prompt, negative_prompt, scale, steps, Seed):
+    generator = torch.manual_seed(Seed)
     raw_img = Image.open(raw_img).convert("RGB")
     if model == "Upscaler 4x":
         low_res_img = raw_img.resize((128, 128))
@@ -36,7 +36,8 @@ gr.Interface(fn=upscale, inputs=[
     gr.Textbox(label="Optional: Enter a Prompt to Slightly Guide the AI's Enhancement"), 
     gr.Textbox(label='Experimental: Slightly influence What you do not want the AI to Enhance.'), 
     gr.Slider(2, 15, 7, step=1, label='Guidance Scale: How much the AI influences the Upscaling.'), 
-    gr.Slider(5, 50, 25, step=1, label='Number of Iterations')], 
+    gr.Slider(5, 50, 25, step=1, label='Number of Iterations'),
+    gr.Slider(min=1, max=999999999999999999, randomize=True, step=1)], 
     outputs=gr.Image(type="filepath", label = 'Upscaled Image'), 
     title='SD Upscaler', 
     description='2x Latent Upscaler using SD 2.0 And 4x Upscaler using SD 2.1. This version runs on CPU or GPU and is currently running on a T4 GPU. For 4x Upscaling use images lower than 512x512. For 2x Upscaling use 512x512 to 768x768 images.<br><br><b>Notice: Largest Accepted Resolution is 768x768', 
