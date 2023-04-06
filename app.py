@@ -35,7 +35,7 @@ gr.Interface(fn=upscale, inputs=[
     gr.Radio(['Upscaler 2x','Upscaler 4x'], label="Models"),
     gr.Textbox(label="Optional: Enter a Prompt to Slightly Guide the AI's Enhancement"), 
     gr.Textbox(label='Experimental: Slightly influence What you do not want the AI to Enhance.'), 
-    gr.Slider(2, 15, 7, step=1, label='Guidance Scale: How much the AI influences the Upscaling.'), 
+    gr.Slider(1, 15, 7, step=1, label='Guidance Scale: How much the AI influences the Upscaling.'), 
     gr.Slider(5, 50, 25, step=1, label='Number of Iterations'),
     gr.Slider(minimum=1, maximum=999999999999999999, randomize=True, step=1)], 
     outputs=gr.Image(type="filepath", label = 'Upscaled Image'), 
