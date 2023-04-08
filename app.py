@@ -40,5 +40,5 @@ gr.Interface(fn=upscale, inputs=[
     gr.Slider(minimum=1, maximum=999999999999999999, randomize=True, step=1)], 
     outputs=gr.Image(type="filepath", label = 'Upscaled Image'), 
     title='SD Upscaler', 
-    description='2x Latent Upscaler using SD 2.0 And 4x Upscaler using SD 2.1. This version runs on CPU or GPU and is currently running on a T4 GPU. For 4x Upscaling use images lower than 512x512. For 2x Upscaling use 512x512 to 768x768 images.<br><br><b>Notice: Largest Accepted Resolution is 768x768', 
+    description='2x Latent Upscaler using SD 2.0 And 4x Upscaler using SD 2.1. This version runs on CPU or GPU and is currently running on a T4 GPU. For 4x Upscaling use images lower than 512x512, ideally 128x128 or smaller for 512x512 output. For 2x Upscaling use up to 512x512 images for 1024x1024 output.<br><br><b>Notice: Largest Accepted Resolution is 512x512', 
     article = "Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>").launch(max_threads=True, debug=True)
