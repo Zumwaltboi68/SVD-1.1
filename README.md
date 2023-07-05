@@ -1,5 +1,5 @@
 ---
-title: SD 2X & 4X Upscaler
+title: Music Genie GPU
 emoji: ⚡
 colorFrom: green
 colorTo: indigo
