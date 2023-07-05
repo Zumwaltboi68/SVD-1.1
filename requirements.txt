@@ -1,4 +1,4 @@
-audiocraft
+git+https://github.com/facebookresearch/audiocraft
 av
 einops
 flashy>=0.0.1
