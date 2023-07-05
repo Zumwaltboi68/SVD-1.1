@@ -166,7 +166,7 @@ def ui_full(launch_kwargs):
         submit.click(predict_full, inputs=[model, text, melody, duration, topk, topp, temperature, cfg_coef], outputs=[output])
         gr.Examples(
             fn=predict_full,
-            examples=[
+            #examples=[
                 [
                     "An 80s driving pop song with heavy drums and synth pads in the background",
                     "./assets/bach.mp3",
