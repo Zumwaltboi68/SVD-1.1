@@ -1,4 +1,4 @@
-# please make sure you have already a pytorch install that is cuda enabled!
+audiocraft
 av
 einops
 flashy>=0.0.1
