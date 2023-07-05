@@ -169,12 +169,12 @@ def ui_full(launch_kwargs):
             examples=[
                 [
                     "An 80s driving pop song with heavy drums and synth pads in the background",
-                    "./assets/bach.mp3",
+                    "./bach.mp3",
                     "melody"
                 ],
                 [
                     "A cheerful country song with acoustic guitars",
-                    "./assets/bolero_ravel.mp3",
+                    "./bolero_ravel.mp3",
                     "melody"
                 ],
                 [
@@ -184,7 +184,7 @@ def ui_full(launch_kwargs):
                 ],
                 [
                     "a light and cheerly EDM track, with syncopated drums, aery pads, and strong emotions",
-                    "./assets/bach.mp3",
+                    "./bach.mp3",
                     "melody"
                 ],
                 [
