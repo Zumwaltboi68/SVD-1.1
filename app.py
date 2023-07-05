@@ -16,7 +16,7 @@ from tempfile import NamedTemporaryFile
 import time
 import typing as tp
 import warnings
-
+import modin.pandas as pd
 import torch
 import gradio as gr
 
