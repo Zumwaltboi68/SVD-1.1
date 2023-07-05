@@ -49,7 +49,7 @@ pool.__enter__()
 
 def interrupt():
     global INTERRUPTING
-    INTERRUPTING = True
+    INTERRUPTING = False
 
 
 class FileCleaner:
@@ -199,7 +199,7 @@ def ui_full(launch_kwargs):
                 with gr.Row():
                     submit = gr.Button("Submit")
                     # Adapted from https://github.com/rkfg/audiocraft/blob/long/app.py, MIT license.
-                    _ = gr.Button("Interrupt").click(fn=interrupt, queue=False)
+                    #_ = gr.Button("Interrupt").click(fn=interrupt, queue=False)
                 with gr.Row():
                     model = gr.Radio(["melody", "medium", "small", "large"],
                                      label="Model", value="melody", interactive=True)
