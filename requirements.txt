@@ -18,4 +18,5 @@ xformers
 demucs
 librosa
 gradio
+accelerate 
 modin[all]
