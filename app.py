@@ -14,7 +14,7 @@ def genie(Prompt, Duration):
         with NamedTemporaryFile("wb", suffix=".wav", delete=False) as file:
             audio_write(
                 file.name, one_wav.cpu(), model.sample_rate, strategy="loudness",
-                loudness_headroom_db=16, loudness_compressor=True, add_suffix=False)                
+                loudness_headroom_db=16, add_suffix=False)                
     return file.name
     
 title = 'MusicGen'
