@@ -27,7 +27,7 @@ torch.cuda.empty_cache()
 def genie (prompt, negative_prompt, scale, steps, seed):
      torch.cuda.empty_cache()
      generator = torch.Generator(device=device).manual_seed(seed)
-     int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, guidance_scale=scale, num_images_per_prompt=1, generator=generator, width=512, height=512, output_type="latent").images 
+     int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, guidance_scale=scale, num_images_per_prompt=1, generator=generator, width=767, height=768, output_type="latent").images 
      torch.cuda.empty_cache()
      image = refiner(prompt=prompt, image=int_image).images[0]
      return image
