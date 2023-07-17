@@ -18,16 +18,15 @@ pipe = pipe.to(device)
 pipe.enable_xformers_memory_efficient_attention()
 torch.cuda.empty_cache()
 
-refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
-refiner = refiner.to(device)
-#refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
-refiner.enable_xformers_memory_efficient_attention()
-torch.cuda.empty_cache()
+
 
 def genie (prompt, negative_prompt, scale, steps, seed):
      torch.cuda.empty_cache()
      generator = torch.Generator(device=device).manual_seed(seed)
      int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, guidance_scale=scale, num_images_per_prompt=1, generator=generator, width=768, height=768, output_type="latent").images 
+     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
+     refiner = refiner.to(device)
+     refiner.enable_xformers_memory_efficient_attention()
      torch.cuda.empty_cache()
      image = refiner(prompt=prompt, image=int_image).images[0]
      return image
