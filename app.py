@@ -27,7 +27,7 @@ def genie (prompt, negative_prompt, scale, steps, seed):
         pipe.enable_xformers_memory_efficient_attention()
         torch.cuda.empty_cache()
         image = pipe(prompt=prompt, image=int_image).images[0]
-    return image
+        return image
   
 
     
