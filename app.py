@@ -30,7 +30,7 @@ def genie (prompt, negative_prompt, scale, steps, seed):
    
 gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate. 77 Token Limit.'), 
     gr.Textbox(label='What you Do Not want the AI to generate.'), 
-    gr.Slider(1, 15, 10), gr.Slider(25, maximum=50, value=25, step=1), 
+    gr.Slider(1, 15, 10), gr.Slider(25, maximum=100, value=50, step=1), 
     gr.Slider(minimum=1, step=1, maximum=999999999999999999, randomize=True)], 
     outputs='image', 
     title="Stable Diffusion XL .9 CPU", 
