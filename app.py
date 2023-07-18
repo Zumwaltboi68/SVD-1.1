@@ -23,7 +23,7 @@ def genie (prompt, negative_prompt, scale, steps, seed):
         int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, guidance_scale=scale, num_images_per_prompt=1, generator=generator, ).images
         torch.cuda.empty_cache()
         pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
-        pipe = refiner.to(device)
+        pipe = pipe.to(device)
         pipe.enable_xformers_memory_efficient_attention()
         torch.cuda.empty_cache()
         image = pipe(prompt=prompt, image=int_image).images[0]
