@@ -1,5 +1,5 @@
 ---
-title: Music Genie GPU
+title: SDXL-0.9
 emoji: ⚡
 colorFrom: green
 colorTo: indigo
