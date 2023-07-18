@@ -32,7 +32,7 @@ def genie (prompt, negative_prompt, scale, steps, seed):
 
 def refiner (prompt, negative_prompt, scale, steps, seed):
     int_image = genie(prompt, negative_prompt, scale, steps, seed)
-    image = refiner(prompt=prompt, image=int_image).images[0]
+    image = refiner(prompt=prompt, int_image).images[0]
     return image
 
     
