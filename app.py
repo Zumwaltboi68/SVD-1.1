@@ -6,22 +6,24 @@ from PIL import Image
 from diffusers import DiffusionPipeline 
 from huggingface_hub import login
 import os
+from diffusers.models import AutoencoderKL
 
 login(token=os.environ.get('HF_KEY'))
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-
 torch.cuda.max_memory_allocated(device=device)
+vae = AutoencoderKL.from_pretrained("stabilityai/sdxl-vae", torch_dtype=torch.float16)
+torch.cuda.empty_cache()
 
 def genie (prompt, negative_prompt, scale, steps, seed):
-    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
+    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True, vae=vae)
     pipe = pipe.to(device)
     #pipe.enable_xformers_memory_efficient_attention()
     torch.cuda.empty_cache()
     generator = torch.Generator(device=device).manual_seed(seed)
-    int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, guidance_scale=scale, num_images_per_prompt=1, generator=generator, ).images
+    int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, guidance_scale=scale, num_images_per_prompt=1, generator=generator).images
     torch.cuda.empty_cache()
-    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
+    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True, vae=vae)
     pipe = pipe.to(device)
     #pipe.enable_xformers_memory_efficient_attention()
     torch.cuda.empty_cache()
