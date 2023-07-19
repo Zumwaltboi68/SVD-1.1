@@ -46,7 +46,7 @@ def genie (prompt, negative_prompt, scale, steps, seed, upscaler):
         pipe.enable_xformers_memory_efficient_attention()
         image = pipe(prompt=prompt, image=int_image).images[0]
         torch.cuda.empty_cache()
-    return image
+    return (image, image)
    
 gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate. 77 Token Limit.'), 
     gr.Textbox(label='What you Do Not want the AI to generate.'), 
