@@ -15,7 +15,7 @@ torch.cuda.max_memory_allocated(device='cuda')
 vae = AutoencoderKL.from_pretrained("stabilityai/sdxl-vae", torch_dtype=torch.float16)
 torch.cuda.empty_cache()
 
-def genie (prompt, negative_prompt, scale, steps, seed, upscale):
+def genie (prompt, negative_prompt, scale, steps, seed, upscaler):
     torch.cuda.max_memory_allocated(device='cuda')
     pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True, vae=vae)
     pipe = pipe.to(device)
