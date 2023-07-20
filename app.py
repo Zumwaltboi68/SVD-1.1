@@ -58,5 +58,5 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Radio(['Yes', 'No'], label='Upscale?')], 
     outputs=['image', 'image'],
     title="Stable Diffusion XL 0.9 GPU", 
-    description="SDXL 0.9 GPU. <b>WARNING:</b> Capable of producing NSFW images.", 
+    description="SDXL 0.9 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
     article = "Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>").launch(debug=True, max_threads=80)
