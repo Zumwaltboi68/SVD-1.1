@@ -48,8 +48,8 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler)
         torch.cuda.empty_cache()
     return (image, image)
    
-gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate.<b> 77 Token Limit. A Token is Any Word, Number, Symbol, or Punctuation. Everything Over 77 Will Be Truncated!'), 
-    gr.Textbox(label='What you Do Not want the AI to generate. <b>77 Token Limit'), 
+gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate.<b> 77 Token Limit. A Token is Any Word, Number, Symbol, or Punctuation. Everything Over 77 Will Be Truncated!</b>'), 
+    gr.Textbox(label='What you Do Not want the AI to generate. <b>77 Token Limit</b>'), 
     gr.Slider(512, 1024, 768, step=128, label='Height'),
     gr.Slider(512, 1024, 768, step=128, label='Width'),
     gr.Slider(1, 15, 10, step=.25, label='Guidance Scale: How Closely the AI follows the Prompt'), 
