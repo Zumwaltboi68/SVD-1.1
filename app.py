@@ -15,14 +15,14 @@ torch.cuda.max_memory_allocated(device='cuda')
 vae = AutoencoderKL.from_pretrained("stabilityai/sdxl-vae", torch_dtype=torch.float16)
 torch.cuda.empty_cache()
 
-def genie (prompt, negative_prompt, scale, steps, seed, upscaler):
+def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler):
     torch.cuda.max_memory_allocated(device='cuda')
     pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True, vae=vae)
     pipe = pipe.to(device)
     pipe.enable_xformers_memory_efficient_attention()
     torch.cuda.empty_cache()
     generator = torch.Generator(device=device).manual_seed(seed)
-    int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, guidance_scale=scale, num_images_per_prompt=1, generator=generator).images
+    int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator).images
     torch.cuda.empty_cache()
     if upscaler == 'Yes':
         torch.cuda.max_memory_allocated(device='cuda')
@@ -48,10 +48,13 @@ def genie (prompt, negative_prompt, scale, steps, seed, upscaler):
         torch.cuda.empty_cache()
     return (image, image)
    
-gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate. 77 Token Limit.'), 
-    gr.Textbox(label='What you Do Not want the AI to generate.'), 
-    gr.Slider(1, 15, 10), gr.Slider(25, maximum=100, value=50, step=1), 
-    gr.Slider(minimum=1, step=1, maximum=999999999999999999, randomize=True),
+gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate.<b> 77 Token Limit. A Token is Any Word, Number, Symbol, or Punctuation. Everything Over 77 Will Be Truncated!'), 
+    gr.Textbox(label='What you Do Not want the AI to generate. <b>77 Token Limit'), 
+    gr.Slider(512, 1024, 768, step=128, label='Height'),
+    gr.Slider(512, 1024, 768, step=128, label='Width'),
+    gr.Slider(1, 15, 10, step=.25, label='Guidance Scale: How Closely the AI follows the Prompt'), 
+    gr.Slider(25, maximum=100, value=50, step=25, label='Number of Iterations'), 
+    gr.Slider(minimum=1, step=1, maximum=999999999999999999, randomize=True, label='Seed'),
     gr.Radio(['Yes', 'No'], label='Upscale?')], 
     outputs=['image', 'image'],
     title="Stable Diffusion XL 0.9 GPU", 
