@@ -42,7 +42,7 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler)
         pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
         pipe = pipe.to(device)
         pipe.enable_xformers_memory_efficient_attention()
-        image = pipe(prompt=prompt, image=int_image).images[0]
+        image = pipe(prompt=prompt, negative_prompt=negative_prompt, image=int_image).images[0]
         torch.cuda.empty_cache()
     return (image, image)
    
