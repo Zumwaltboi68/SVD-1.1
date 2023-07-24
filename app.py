@@ -20,7 +20,7 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler)
     pipe.enable_xformers_memory_efficient_attention()
     torch.cuda.empty_cache()
     generator = torch.Generator(device=device).manual_seed(seed)
-    int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator).images
+    int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
     torch.cuda.empty_cache()
     if upscaler == 'Yes':
         torch.cuda.max_memory_allocated(device='cuda')
