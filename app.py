@@ -15,7 +15,7 @@ torch.cuda.empty_cache()
 
 def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler):
     torch.cuda.max_memory_allocated(device='cuda')
-    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
+    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
     pipe = pipe.to(device)
     pipe.enable_xformers_memory_efficient_attention()
     torch.cuda.empty_cache()
@@ -24,7 +24,7 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler)
     torch.cuda.empty_cache()
     if upscaler == 'Yes':
         torch.cuda.max_memory_allocated(device='cuda')
-        pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
+        pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
         pipe = pipe.to(device)
         pipe.enable_xformers_memory_efficient_attention()
         image = pipe(prompt=prompt, image=int_image).images[0]
