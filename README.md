@@ -1,5 +1,5 @@
 ---
-title: SDXL-0.9
+title: SDXL-1.0
 emoji: ⚡
 colorFrom: green
 colorTo: indigo
