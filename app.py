@@ -57,4 +57,4 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     outputs=['image', 'image'],
     title="Stable Diffusion XL 1.0 GPU", 
     description="SDXL 1.0 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
-    article = "Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>").queue(concurrency_count=2).launch(debug=True, max_threads=80)
+    article = "Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>").queue(concurrency_count=1).launch(debug=True, max_threads=80)
