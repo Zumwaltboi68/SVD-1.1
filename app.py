@@ -33,18 +33,16 @@ else:
     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True)
     refiner = refiner.to(device)
     
-def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler):
+def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling):
     generator = torch.Generator(device=device).manual_seed(seed)
     int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
-    torch.cuda.empty_cache()
-    if upscaler == 'Yes':
+    if upscaling == 'Yes':
         image = refiner(prompt=prompt, image=int_image).images[0]
-        torch.cuda.empty_cache()
         upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=5, guidance_scale=0).images[0]
         torch.cuda.empty_cache()
         return (image, upscaled)
     else:
-        image = refiner(prompt=prompt, negative_prompt=negative_prompt, image=int_image).images[0]
+        image = refiner(prompt=prompt, negative_prompt=negative_prompt, image=int_image).images[0]   
         torch.cuda.empty_cache()
     return (image, image)
    
