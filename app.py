@@ -10,39 +10,47 @@ import os
 login(token=os.environ.get('HF_KEY'))
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+
+if torch.cuda.is_available():
+    PYTORCH_CUDA_ALLOC_CONF={'max_split_size_mb': 6000}
+    torch.cuda.max_memory_allocated(device=device)
+    torch.cuda.empty_cache()
+    
+    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
+    pipe.enable_xformers_memory_efficient_attention()
+    pipe = pipe.to(device)
+    torch.cuda.empty_cache()
+    
+    refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True, torch_dtype=torch.float16, variant="fp16")
+    refiner.enable_xformers_memory_efficient_attention()
+    refiner = refiner.to(device)
+    torch.cuda.empty_cache()
+    
+    upscaler = DiffusionPipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16, use_safetensors=True)
+    upscaler.enable_xformers_memory_efficient_attention()
+    upscaler = upscaler.to(device)
+    torch.cuda.empty_cache()
+else: 
+    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", use_safetensors=True)
+    pipe = pipe.to(device)
+    refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True)
+    refiner = refiner.to(device)
+    
 torch.cuda.max_memory_allocated(device='cuda')
 torch.cuda.empty_cache()
 
 def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaler):
-    torch.cuda.max_memory_allocated(device='cuda')
-    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
-    pipe = pipe.to(device)
-    pipe.enable_xformers_memory_efficient_attention()
-    torch.cuda.empty_cache()
     generator = torch.Generator(device=device).manual_seed(seed)
     int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
     torch.cuda.empty_cache()
     if upscaler == 'Yes':
-        torch.cuda.max_memory_allocated(device='cuda')
-        pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
-        pipe = pipe.to(device)
-        pipe.enable_xformers_memory_efficient_attention()
-        image = pipe(prompt=prompt, image=int_image).images[0]
+        image = refiner(prompt=prompt, image=int_image).images[0]
         torch.cuda.empty_cache()
-        torch.cuda.max_memory_allocated(device='cuda')
-        pipe = DiffusionPipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16, use_safetensors=True)
-        pipe.to("cuda")
-        pipe.enable_xformers_memory_efficient_attention()
-        upscaled = pipe(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=5, guidance_scale=0).images[0]
+        upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=5, guidance_scale=0).images[0]
         torch.cuda.empty_cache()
         return (image, upscaled)
     else:
-        torch.cuda.empty_cache()
-        torch.cuda.max_memory_allocated(device=device)
-        pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
-        pipe = pipe.to(device)
-        pipe.enable_xformers_memory_efficient_attention()
-        image = pipe(prompt=prompt, negative_prompt=negative_prompt, image=int_image).images[0]
+        image = refiner(prompt=prompt, negative_prompt=negative_prompt, image=int_image).images[0]
         torch.cuda.empty_cache()
     return (image, image)
    
