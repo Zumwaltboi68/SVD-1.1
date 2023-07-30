@@ -4,12 +4,6 @@ import numpy as np
 import modin.pandas as pd
 from PIL import Image
 from diffusers import DiffusionPipeline 
-from huggingface_hub import login
-import os
-
-login(token=os.environ.get('HF_KEY'))
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
 
 if torch.cuda.is_available():
     PYTORCH_CUDA_ALLOC_CONF={'max_split_size_mb': 6000}
