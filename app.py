@@ -57,4 +57,4 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     outputs=['image', 'image'],
     title="Stable Diffusion XL 1.0 GPU", 
     description="SDXL 1.0 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
-    article = "Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>").queue(concurrency_count=1).launch(debug=True, max_threads=80)
+    article = "If You Enjoyed this Demo and would like to Donate, you can send to any of these Wallets. <br>BTC: bc1qzdm9j73mj8ucwwtsjx4x4ylyfvr6kp7svzjn84 <br>3LWRoKYx6bCLnUrKEdnPo3FCSPQUSFDjFP <br>DOGE: DK6LRc4gfefdCTRk9xPD239N31jh9GjKez <br>SHIB (BEP20): 0xbE8f2f3B71DFEB84E5F7E3aae1909d60658aB891 <br>PayPal: https://www.paypal.me/ManjushriBodhisattva <br>ETH: 0xbE8f2f3B71DFEB84E5F7E3aae1909d60658aB891 <br>Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>").queue(concurrency_count=2).launch(debug=True, max_threads=80)
