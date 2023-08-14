@@ -53,7 +53,7 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Slider(1, 15, 10, step=.25, label='Guidance Scale: How Closely the AI follows the Prompt'), 
     gr.Slider(25, maximum=100, value=50, step=25, label='Number of Iterations'), 
     gr.Slider(minimum=1, step=1, maximum=999999999999999999, randomize=True, label='Seed'),
-    gr.Radio(['Yes', 'No'], label='Upscale?'),
+    gr.Radio(['Yes', 'No'], value='No', label='Upscale?'),
     gr.Textbox(label='Embedded Prompt'),
     gr.Textbox(label='Embedded Negative Prompt')], 
     outputs=['image', 'image'],
