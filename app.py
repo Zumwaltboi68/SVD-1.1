@@ -33,16 +33,16 @@ else:
     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True)
     refiner = refiner.to(device)
     
-def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling):
+def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2):
     generator = torch.Generator(device=device).manual_seed(seed)
-    int_image = pipe(prompt, negative_prompt=negative_prompt, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
+    int_image = pipe(prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
     if upscaling == 'Yes':
-        image = refiner(prompt=prompt, image=int_image).images[0]
+        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]
         upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=5, guidance_scale=0).images[0]
         torch.cuda.empty_cache()
         return (image, upscaled)
     else:
-        image = refiner(prompt=prompt, negative_prompt=negative_prompt, image=int_image).images[0]   
+        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]   
         torch.cuda.empty_cache()
     return (image, image)
    
@@ -53,7 +53,9 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Slider(1, 15, 10, step=.25, label='Guidance Scale: How Closely the AI follows the Prompt'), 
     gr.Slider(25, maximum=100, value=50, step=25, label='Number of Iterations'), 
     gr.Slider(minimum=1, step=1, maximum=999999999999999999, randomize=True, label='Seed'),
-    gr.Radio(['Yes', 'No'], label='Upscale?')], 
+    gr.Radio(['Yes', 'No'], label='Upscale?'),
+    gr.Textbox(label='Embedded Prompt'),
+    gr.Textbox(label='Embedded Negative Prompt')], 
     outputs=['image', 'image'],
     title="Stable Diffusion XL 1.0 GPU", 
     description="SDXL 1.0 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
