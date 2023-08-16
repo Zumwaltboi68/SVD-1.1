@@ -17,19 +17,19 @@ if torch.cuda.is_available():
     pipe.enable_xformers_memory_efficient_attention()
     pipe = pipe.to(device)
     pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
-    torch.cuda.empty_cache()
+    #torch.cuda.empty_cache()
     
     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True, torch_dtype=torch.float16, variant="fp16")
     refiner.enable_xformers_memory_efficient_attention()
     refiner = refiner.to(device)
     refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
-    torch.cuda.empty_cache()
+    #torch.cuda.empty_cache()
     
     upscaler = DiffusionPipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16, use_safetensors=True)
     upscaler.enable_xformers_memory_efficient_attention()
     upscaler = upscaler.to(device)
     upscaler.unet = torch.compile(upscaler.unet, mode="reduce-overhead", fullgraph=True)
-    torch.cuda.empty_cache()
+    #torch.cuda.empty_cache()
 else: 
     pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", use_safetensors=True)
     pipe = pipe.to(device)
@@ -47,11 +47,11 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling
     if upscaling == 'Yes':
         image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]
         upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=5, guidance_scale=0).images[0]
-        torch.cuda.empty_cache()
+        #torch.cuda.empty_cache()
         return (image, upscaled)
     else:
         image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]   
-        torch.cuda.empty_cache()
+        #torch.cuda.empty_cache()
     return (image, image)
 
 gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate. 77 Token Limit. A Token is Any Word, Number, Symbol, or Punctuation. Everything Over 77 Will Be Truncated!'), 
