@@ -16,23 +16,31 @@ if torch.cuda.is_available():
     pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
     pipe.enable_xformers_memory_efficient_attention()
     pipe = pipe.to(device)
+    pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
     torch.cuda.empty_cache()
     
     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True, torch_dtype=torch.float16, variant="fp16")
     refiner.enable_xformers_memory_efficient_attention()
     refiner = refiner.to(device)
+    refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
     torch.cuda.empty_cache()
     
     upscaler = DiffusionPipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16, use_safetensors=True)
     upscaler.enable_xformers_memory_efficient_attention()
     upscaler = upscaler.to(device)
+    upscaler.unet = torch.compile(upscaler.unet, mode="reduce-overhead", fullgraph=True)
     torch.cuda.empty_cache()
 else: 
     pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", use_safetensors=True)
     pipe = pipe.to(device)
+    pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True)
     refiner = refiner.to(device)
-    
+    refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
+
+n_steps = 40
+high_noise_frac = 0.8
+       
 def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2):
     generator = torch.Generator(device=device).manual_seed(seed)
     int_image = pipe(prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
@@ -45,7 +53,7 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling
         image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]   
         torch.cuda.empty_cache()
     return (image, image)
-   
+
 gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate. 77 Token Limit. A Token is Any Word, Number, Symbol, or Punctuation. Everything Over 77 Will Be Truncated!'), 
     gr.Textbox(label='What you Do Not want the AI to generate. 77 Token Limit'), 
     gr.Slider(512, 1024, 768, step=128, label='Height'),
