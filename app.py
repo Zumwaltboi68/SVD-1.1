@@ -5,7 +5,6 @@ import modin.pandas as pd
 from PIL import Image
 from diffusers import DiffusionPipeline 
 
-
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 if torch.cuda.is_available():
