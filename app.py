@@ -9,7 +9,7 @@ from diffusers import DiffusionPipeline
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 if torch.cuda.is_available():
-    PYTORCH_CUDA_ALLOC_CONF={'max_split_size_mb': 6000}
+    PYTORCH_CUDA_ALLOC_CONF={'max_split_size_mb': 8000}
     torch.cuda.max_memory_allocated(device=device)
     torch.cuda.empty_cache()
     
