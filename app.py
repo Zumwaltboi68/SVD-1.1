@@ -17,19 +17,19 @@ if torch.cuda.is_available():
     pipe.enable_xformers_memory_efficient_attention()
     pipe = pipe.to(device)
     pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
-    #torch.cuda.empty_cache()
+    torch.cuda.empty_cache()
     
     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True, torch_dtype=torch.float16, variant="fp16")
     refiner.enable_xformers_memory_efficient_attention()
     refiner = refiner.to(device)
     refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
-    #torch.cuda.empty_cache()
+    torch.cuda.empty_cache()
     
     upscaler = DiffusionPipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16, use_safetensors=True)
     upscaler.enable_xformers_memory_efficient_attention()
     upscaler = upscaler.to(device)
     upscaler.unet = torch.compile(upscaler.unet, mode="reduce-overhead", fullgraph=True)
-    #torch.cuda.empty_cache()
+    torch.cuda.empty_cache()
 else: 
     pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", use_safetensors=True)
     pipe = pipe.to(device)
