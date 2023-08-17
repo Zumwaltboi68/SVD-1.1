@@ -45,11 +45,11 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling
     if upscaling == 'Yes':
         image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]
         upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=5, guidance_scale=0).images[0]
-        #torch.cuda.empty_cache()
+        torch.cuda.empty_cache()
         return (image, upscaled)
     else:
         image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]   
-        #torch.cuda.empty_cache()
+        torch.cuda.empty_cache()
     return (image, image)
 
 gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate. 77 Token Limit. A Token is Any Word, Number, Symbol, or Punctuation. Everything Over 77 Will Be Truncated!'), 
