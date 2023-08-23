@@ -34,8 +34,8 @@ else:
     refiner = refiner.to(device)
     refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
 
-#n_steps = 40
-#high_noise_frac = 0.8
+n_steps = 40
+high_noise_frac = 0.8
        
 def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2):
     generator = torch.Generator(device=device).manual_seed(seed)
