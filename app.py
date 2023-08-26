@@ -38,7 +38,7 @@ n_steps = 40
 high_noise_frac = 0.8
        
 def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2):
-    generator = torch.Generator(device).manual_seed(seed)
+    generator = np.random.seed(0) if seed == 0 else torch.manual_seed(seed)
     int_image = pipe(prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
     if upscaling == 'Yes':
         image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]
@@ -56,7 +56,7 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Slider(512, 1024, 768, step=128, label='Width'),
     gr.Slider(1, 15, 10, step=.25, label='Guidance Scale: How Closely the AI follows the Prompt'), 
     gr.Slider(25, maximum=100, value=50, step=25, label='Number of Iterations'), 
-    gr.Slider(minimum=0, step=1, maximum=999999999999999999, randomize=True, label='Seed'),
+    gr.Slider(minimum=0, step=1, maximum=999999999999999999, randomize=True, label='Seed: 0 is Random'),
     gr.Radio(['Yes', 'No'], value='No', label='Upscale?'),
     gr.Textbox(label='Embedded Prompt'),
     gr.Textbox(label='Embedded Negative Prompt')], 
