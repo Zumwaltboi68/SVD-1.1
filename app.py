@@ -33,11 +33,10 @@ else:
     refiner = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-1.0", use_safetensors=True)
     refiner = refiner.to(device)
     refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
-
-n_steps = 40
-high_noise_frac = 0.8
-       
+      
 def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2):
+    n_steps = 40
+    high_noise_frac = 0.8
     generator = np.random.seed(0) if seed == 0 else torch.manual_seed(seed)
     int_image = pipe(prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
     if upscaling == 'Yes':
