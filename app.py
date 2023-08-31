@@ -35,7 +35,7 @@ else:
     refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
 
 n_steps = 40
-high_noise_frac = 0.7
+high_noise_frac = 0.8
        
 def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2):
     generator = np.random.seed(0) if seed == 0 else torch.manual_seed(seed)
@@ -46,7 +46,8 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling
         torch.cuda.empty_cache()
         return (image, upscaled)
     else:
-        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image).images[0]   
+        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, num_inference_steps=n_steps,
+    denoising_start=high_noise_frac).images[0]   
         torch.cuda.empty_cache()
     return (image, image)
 
