@@ -58,7 +58,7 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Radio(['Yes', 'No'], value='No', label='Upscale?'),
     gr.Textbox(label='Embedded Prompt'),
     gr.Textbox(label='Embedded Negative Prompt'),
-    gr.Slider(minimum=.1, maximum=.99, value=.8, step=.01, label='Refiner Level: Higher Value is Less Refinement')], 
+    gr.Slider(minimum=.7, maximum=.99, value=.8, step=.01, label='Refiner Denoise %')], 
     outputs=['image', 'image'],
     title="Stable Diffusion XL 1.0 GPU", 
     description="SDXL 1.0 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
