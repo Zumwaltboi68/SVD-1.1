@@ -34,7 +34,7 @@ else:
     refiner = refiner.to(device)
     refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
       
-def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2):
+def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2, high_noise_frac):
     n_steps = 40
     high_noise_frac = 0.8
     generator = np.random.seed(0) if seed == 0 else torch.manual_seed(seed)
@@ -58,7 +58,8 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Slider(minimum=0, step=1, maximum=999999999999999999, randomize=True, label='Seed: 0 is Random'),
     gr.Radio(['Yes', 'No'], value='No', label='Upscale?'),
     gr.Textbox(label='Embedded Prompt'),
-    gr.Textbox(label='Embedded Negative Prompt')], 
+    gr.Textbox(label='Embedded Negative Prompt'),
+    gr.Slider(minimum=.1, maximum=.99, value=.8, step=.01, label='Refiner Level: Higher Value is Less Refinement')], 
     outputs=['image', 'image'],
     title="Stable Diffusion XL 1.0 GPU", 
     description="SDXL 1.0 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
