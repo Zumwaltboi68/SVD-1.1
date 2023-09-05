@@ -34,17 +34,16 @@ else:
     refiner = refiner.to(device)
     refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
       
-def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2, high_noise_frac):
-    #n_steps = 40
+def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling, prompt_2, negative_prompt_2, high_noise_frac, n_steps):
     generator = np.random.seed(0) if seed == 0 else torch.manual_seed(seed)
     int_image = pipe(prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator, output_type="latent").images
     if upscaling == 'Yes':
-        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, denoising_start=high_noise_frac).images[0] #num_inference_steps=n_steps,
+        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, num_inference_steps=n_steps, denoising_start=high_noise_frac).images[0] #num_inference_steps=n_steps,
         upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=5, guidance_scale=0).images[0]
         torch.cuda.empty_cache()
         return (image, upscaled)
     else:
-        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, denoising_start=high_noise_frac).images[0]   
+        image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, num_inference_steps=n_steps ,denoising_start=high_noise_frac).images[0]   
         torch.cuda.empty_cache()
     return (image, image)
 
@@ -58,7 +57,8 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Radio(['Yes', 'No'], value='No', label='Upscale?'),
     gr.Textbox(label='Embedded Prompt'),
     gr.Textbox(label='Embedded Negative Prompt'),
-    gr.Slider(minimum=.7, maximum=.99, value=.95, step=.01, label='Refiner Denoise Start %')], 
+    gr.Slider(minimum=.7, maximum=.99, value=.95, step=.01, label='Refiner Denoise Start %'),
+    gr.Slider(minimum=5, maximum=100, value=30, step=1, label='Refiner Number of Iterations')], 
     outputs=['image', 'image'],
     title="Stable Diffusion XL 1.0 GPU", 
     description="SDXL 1.0 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
