@@ -42,21 +42,21 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling
             image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, num_inference_steps=n_steps, denoising_start=high_noise_frac).images[0] #num_inference_steps=n_steps,
             upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=15, guidance_scale=0).images[0]
             torch.cuda.empty_cache()
-            return (image, upscaled)
+            return upscaled
         else:
             image = refiner(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, num_inference_steps=n_steps ,denoising_start=high_noise_frac).images[0]
             torch.cuda.empty_cache()
-            return (image, image)
+            return image
     else:
         if upscaling == 'Yes':
             image = pipe(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=int_image, num_inference_steps=n_steps, denoising_start=high_noise_frac).images[0] #num_inference_steps=n_steps,
             upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=15, guidance_scale=0).images[0]
             torch.cuda.empty_cache()
-            return (image, upscaled)
+            return upscaled
         else:
             image = pipe(prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, num_inference_steps=steps, height=height, width=width, guidance_scale=scale, num_images_per_prompt=1, generator=generator).images[0]
             torch.cuda.empty_cache()
-    return (image, image)
+    return image
 
 gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generate. 77 Token Limit. A Token is Any Word, Number, Symbol, or Punctuation. Everything Over 77 Will Be Truncated!'), 
     gr.Textbox(label='What you Do Not want the AI to generate. 77 Token Limit'), 
@@ -71,7 +71,7 @@ gr.Interface(fn=genie, inputs=[gr.Textbox(label='What you want the AI to generat
     gr.Radio(["Yes", "No"], label='SDXL 1.0 Refiner: Use if the Image has too much Noise', value='No'),
     gr.Slider(minimum=.7, maximum=.99, value=.95, step=.01, label='Refiner Denoise Start %'),
     gr.Slider(minimum=1, maximum=100, value=100, step=1, label='Refiner Number of Iterations %')], 
-    outputs=['image', 'image'],
+    outputs='image',
     title="Stable Diffusion XL 1.0 GPU", 
     description="SDXL 1.0 GPU. <br><br><b>WARNING: Capable of producing NSFW (Softcore) images.</b>", 
     article = "If You Enjoyed this Demo and would like to Donate, you can send to any of these Wallets. <br>BTC: bc1qzdm9j73mj8ucwwtsjx4x4ylyfvr6kp7svzjn84 <br>BTC2: 3LWRoKYx6bCLnUrKEdnPo3FCSPQUSFDjFP <br>DOGE: DK6LRc4gfefdCTRk9xPD239N31jh9GjKez <br>SHIB (BEP20): 0xbE8f2f3B71DFEB84E5F7E3aae1909d60658aB891 <br>PayPal: https://www.paypal.me/ManjushriBodhisattva <br>ETH: 0xbE8f2f3B71DFEB84E5F7E3aae1909d60658aB891 <br>Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>").launch(debug=True, max_threads=80)
