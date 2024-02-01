@@ -49,7 +49,7 @@ def genie (prompt, negative_prompt, height, width, scale, steps, seed, upscaling
             return image
     else:
         if upscaling == 'Yes':
-            image = pipe(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, image=image, num_inference_steps=n_steps, denoising_start=high_noise_frac).images[0] #num_inference_steps=n_steps,
+            image = pipe(prompt=prompt, prompt_2=prompt_2, negative_prompt=negative_prompt, negative_prompt_2=negative_prompt_2, num_inference_steps=n_steps, denoising_start=high_noise_frac).images[0] #num_inference_steps=n_steps,
             upscaled = upscaler(prompt=prompt, negative_prompt=negative_prompt, image=image, num_inference_steps=15, guidance_scale=0).images[0]
             torch.cuda.empty_cache()
             return upscaled
