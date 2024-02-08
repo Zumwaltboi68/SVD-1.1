@@ -12,7 +12,7 @@ if torch.cuda.is_available():
     torch.cuda.max_memory_allocated(device=device)
     torch.cuda.empty_cache()
     
-    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
+    pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-1.0-tensorrt", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
     pipe.enable_xformers_memory_efficient_attention()
     pipe = pipe.to(device)
     torch.cuda.empty_cache()
