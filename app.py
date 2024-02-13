@@ -19,10 +19,10 @@ torch.cuda.max_memory_allocated(device=device)
 torch.cuda.empty_cache()
 pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", torch_dtype=torch.float16, use_safetensors=True, variant="fp16" )
 pipe.to("cuda")
-#pipe.enable_xformers_memory_efficient_attention()
 pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 #pipe.vae = torch.compile(pipe.vae, mode="reduce-overhead", fullgraph=True)
-torch.set_float32_matmul_precision('high')
+#torch.set_float32_matmul_precision('high')
+pipe.enable_xformers_memory_efficient_attention()
 torch.cuda.empty_cache()
 max_64_bit_int = 2**63 - 1
 
@@ -55,7 +55,7 @@ def sample(
     torch.cuda.empty_cache()
     return video_path, seed
 
-def resize_image(image, output_size=(768, 384)):
+def resize_image(image, output_size=(1024, 576)):
     # Calculate aspect ratios
     target_aspect = output_size[0] / output_size[1]  # Aspect ratio of the desired size
     image_aspect = image.width / image.height  # Aspect ratio of the original image
