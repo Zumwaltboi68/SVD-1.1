@@ -20,7 +20,7 @@ torch.cuda.empty_cache()
 pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", variant="fp16")
 pipe.to("cuda")
 pipe.enable_xformers_memory_efficient_attention()
-#pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
+pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 #pipe.vae = torch.compile(pipe.vae, mode="reduce-overhead", fullgraph=True)
 
 max_64_bit_int = 2**63 - 1
