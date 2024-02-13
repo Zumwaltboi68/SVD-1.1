@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import modin.pandas as pd
 from PIL import Image
-from diffusers import StableVideoDiffusionPipeline
+from diffusers import DiffusionPipeline
 from huggingface_hub import login
 import os
 
@@ -13,7 +13,7 @@ login(token=token)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 torch.cuda.max_memory_allocated(device=device)
 torch.cuda.empty_cache()
-pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid")
+pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid")
 #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 pipe.enable_xformers_memory_efficient_attention()
 pipe = pipe.to(device)
