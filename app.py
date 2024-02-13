@@ -22,6 +22,7 @@ pipe.to("cuda")
 #pipe.enable_xformers_memory_efficient_attention()
 pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 #pipe.vae = torch.compile(pipe.vae, mode="reduce-overhead", fullgraph=True)
+torch.set_float32_matmul_precision('high')
 torch.cuda.empty_cache()
 max_64_bit_int = 2**63 - 1
 
