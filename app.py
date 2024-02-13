@@ -19,7 +19,7 @@ torch.cuda.max_memory_allocated(device=device)
 torch.cuda.empty_cache()
 pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", variant="fp16")
 pipe.to("cuda")
-pipe.enable_xformers_memory_efficient_attention()
+#pipe.enable_xformers_memory_efficient_attention()
 pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 #pipe.vae = torch.compile(pipe.vae, mode="reduce-overhead", fullgraph=True)
 
