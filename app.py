@@ -18,7 +18,7 @@ torch.cuda.empty_cache()
 def genie(src_image):
     torch.cuda.max_memory_allocated(device=device)
     torch.cuda.empty_cache()
-    pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", variant="fp16", use_safetensors=True)
+    pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt", variant="fp16", use_safetensors=True)
     #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 
     pipe.enable_xformers_memory_efficient_attention()
