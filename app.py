@@ -21,7 +21,7 @@ pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img
 #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 
 pipe.enable_xformers_memory_efficient_attention()
-pipe = pipe.to(device)
+pipe.enable_model_cpu_offload()
 torch.cuda.empty_cache()
 
 max_64_bit_int = 2**63 - 1
