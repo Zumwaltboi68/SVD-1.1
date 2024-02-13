@@ -27,7 +27,7 @@ def sample(
     randomize_seed: bool = True,
     motion_bucket_id: int = 127,
     fps_id: int = 6,
-    version: str = "svd_xt_1-1",
+    version: str = "svd_xt",
     cond_aug: float = 0.02,
     decoding_t: int = 3,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
     device: str = "cpu",
