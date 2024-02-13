@@ -22,7 +22,7 @@ pipe.to("cuda")
 #pipe.enable_xformers_memory_efficient_attention()
 pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 #pipe.vae = torch.compile(pipe.vae, mode="reduce-overhead", fullgraph=True)
-
+torch.cuda.empty_cache()
 max_64_bit_int = 2**63 - 1
 
 def sample(
@@ -51,7 +51,7 @@ def sample(
     frames = pipe(image, decode_chunk_size=decoding_t, generator=generator, motion_bucket_id=motion_bucket_id, noise_aug_strength=0.1, num_frames=25).frames[0]
     export_to_video(frames, video_path, fps=fps_id)
     torch.manual_seed(seed)
-    
+    torch.cuda.empty_cache()
     return video_path, seed
 
 def resize_image(image, output_size=(768, 384)):
@@ -81,7 +81,7 @@ def resize_image(image, output_size=(768, 384)):
         right = output_size[0]
         bottom = (new_height + output_size[1]) / 2
 
-    # Crop the image
+    torch.cuda.empty_cache()
     cropped_image = resized_image.crop((left, top, right, bottom))
     return cropped_image
 
