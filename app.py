@@ -30,7 +30,7 @@ def sample(
     version: str = "svd_xt",
     cond_aug: float = 0.02,
     decoding_t: int = 3,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
-    device: str = "cpu",
+    device: str = "cuda",
     output_folder: str = "outputs",):
         
     if image.mode == "RGBA":
