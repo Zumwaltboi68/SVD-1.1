@@ -4,7 +4,7 @@ import numpy as np
 import modin.pandas as pd
 from PIL import Image
 from diffusers import StableVideoDiffusionPipeline
-from huggingface_hub import login
+from huggingface_hub import login, hf_hub_download
 import os
 from glob import glob
 from pathlib import Path
@@ -15,7 +15,7 @@ import random
 token = os.environ['HF_TOKEN']
 login(token=token)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid", variant="fp16", use_safetensors=True)
+pipe = StableVideoDiffusionPipeline.from_pretrained("multimodalart/stable-video-diffusion", torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
 pipe = pipe.to(device)
 #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 pipe.enable_xformers_memory_efficient_attention()
