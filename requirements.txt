@@ -6,3 +6,5 @@ ftfy
 modin[all]
 xformers
 invisible_watermark
+opencv-python
+uuid
