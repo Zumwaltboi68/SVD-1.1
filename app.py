@@ -13,17 +13,17 @@ login(token=token)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 torch.cuda.max_memory_allocated(device=device)
 torch.cuda.empty_cache()
-pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", torch_dtype=torch.float16, variant="fp16")
+pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", variant="fp16")
 #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 
 pipe.enable_xformers_memory_efficient_attention()
 pipe = pipe.to(device)
 torch.cuda.empty_cache()
 
-def genie(image):
+def genie(src_image):
     torch.cuda.max_memory_allocated(device=device)
     torch.cuda.empty_cache()
-    frames = pipe(image).images[0]
+    frames = pipe(image=src_image).images[0]
     torch.cuda.empty_cache()
     return frames
     
