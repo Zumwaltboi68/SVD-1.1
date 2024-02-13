@@ -29,7 +29,7 @@ def sample(
     version: str = "svd_xt",
     cond_aug: float = 0.02,
     decoding_t: int = 3,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
-    device: str = "cpu",
+    device: str = "cuda",
     output_folder: str = "outputs",
 ):
     if image.mode == "RGBA":
@@ -49,7 +49,7 @@ def sample(
     
     return video_path, seed
 
-def resize_image(image, output_size=(512, 256)):
+def resize_image(image, output_size=(1024, 578)):
     # Calculate aspect ratios
     target_aspect = output_size[0] / output_size[1]  # Aspect ratio of the desired size
     image_aspect = image.width / image.height  # Aspect ratio of the original image
