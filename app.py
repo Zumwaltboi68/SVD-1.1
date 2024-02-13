@@ -21,6 +21,8 @@ pipe = pipe.to(device)
 torch.cuda.empty_cache()
 
 def genie(image):
+    torch.cuda.max_memory_allocated(device=device)
+    torch.cuda.empty_cache()
     frames = pipe(image).images[0]
     return frames
     
