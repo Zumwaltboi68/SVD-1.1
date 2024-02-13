@@ -18,7 +18,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", torch_dtype=torch.float16, variant="fp16")
 pipe = pipe.to(device)
 #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
-
+pipe.enable_xformers_memory_efficient_attention()
 max_64_bit_int = 2**63 - 1
 
 def sample(
@@ -27,7 +27,7 @@ def sample(
     randomize_seed: bool = True,
     motion_bucket_id: int = 127,
     fps_id: int = 6,
-    version: str = "svd_xt",
+    version: str = "svd_xt_1-1",
     cond_aug: float = 0.02,
     decoding_t: int = 3,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
     device: str = "cpu",
@@ -101,4 +101,4 @@ with gr.Blocks() as demo:
 
 if __name__ == "__main__":
     demo.queue(max_size=20, api_open=False)
-    demo.launch(share=True, show_api=False)
+    demo.launch(show_api=False)
