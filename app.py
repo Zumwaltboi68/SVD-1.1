@@ -15,7 +15,7 @@ import random
 token = os.environ['HF_TOKEN']
 login(token=token)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", variant="fp16")
+pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", torch_dtype=torch.float16, variant="fp16")
 pipe = pipe.to(device)
 
 max_64_bit_int = 2**63 - 1
