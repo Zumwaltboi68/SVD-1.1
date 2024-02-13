@@ -15,7 +15,7 @@ import random
 token = os.environ['HF_TOKEN']
 login(token=token)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt", variant="fp16", use_safetensors=True)
+pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt", variant="fp16", torch_dtype=torch.float16, use_safetensors=True)
 pipe = pipe.to(device)
 #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 pipe.enable_xformers_memory_efficient_attention()
