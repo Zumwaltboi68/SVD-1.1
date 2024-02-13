@@ -102,23 +102,7 @@ with gr.Blocks() as demo:
       
   image.upload(fn=resize_image, inputs=image, outputs=image, queue=False)
   generate_btn.click(fn=sample, inputs=[image, seed, randomize_seed, motion_bucket_id, fps_id], outputs=[video, seed], api_name="video")
-  gr.Examples(
-    examples=[
-        "images/blink_meme.png",
-        "images/confused2_meme.png",
-        "images/disaster_meme.png",
-        "images/distracted_meme.png",
-        "images/hide_meme.png",
-        "images/nazare_meme.png",
-        "images/success_meme.png",
-        "images/willy_meme.png",
-        "images/wink_meme.png"
-    ],
-    inputs=image,
-    outputs=[video, seed],
-    fn=sample,
-    cache_examples=True,
-  )
+  
 
 if __name__ == "__main__":
     demo.queue(max_size=20, api_open=False)
