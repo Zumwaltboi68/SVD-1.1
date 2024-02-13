@@ -15,7 +15,7 @@ import random
 token = os.environ['HF_TOKEN']
 login(token=token)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", variant="fp16")
+pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", variant="fp16", use_safetensors=True)
 pipe = pipe.to(device)
 #pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 pipe.enable_xformers_memory_efficient_attention()
@@ -29,7 +29,7 @@ def sample(
     fps_id: int = 6,
     version: str = "svd_xt_1-1",
     cond_aug: float = 0.02,
-    decoding_t: int = 2,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
+    decoding_t: int = 1,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
     device: str = "cuda",
     output_folder: str = "outputs",):
         
