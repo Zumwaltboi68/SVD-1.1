@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import modin.pandas as pd
 from PIL import Image
-from diffusers import StableVideoDiffusionPipeline
+from diffusers import DiffusionPipeline
 from huggingface_hub import login
 import os
 from glob import glob
@@ -15,8 +15,9 @@ import random
 token = os.environ['HF_TOKEN']
 login(token=token)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", torch_dtype=torch.float16, variant="fp16")
+pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-video-diffusion-img2vid-xt-1-1", torch_dtype=torch.float16, variant="fp16")
 pipe = pipe.to(device)
+#pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 
 max_64_bit_int = 2**63 - 1
 
@@ -26,11 +27,12 @@ def sample(
     randomize_seed: bool = True,
     motion_bucket_id: int = 127,
     fps_id: int = 6,
+    version: str = "svd_xt",
     cond_aug: float = 0.02,
     decoding_t: int = 3,  # Number of frames decoded at a time! This eats most VRAM. Reduce if necessary.
-    device: str = "cuda",
-    output_folder: str = "outputs",
-):
+    device: str = "cpu",
+    output_folder: str = "outputs",):
+        
     if image.mode == "RGBA":
         image = image.convert("RGB")
         
@@ -48,7 +50,7 @@ def sample(
     
     return video_path, seed
 
-def resize_image(image, output_size=(1024, 578)):
+def resize_image(image, output_size=(768, 322)):
     # Calculate aspect ratios
     target_aspect = output_size[0] / output_size[1]  # Aspect ratio of the desired size
     image_aspect = image.width / image.height  # Aspect ratio of the original image
@@ -80,9 +82,9 @@ def resize_image(image, output_size=(1024, 578)):
     return cropped_image
 
 with gr.Blocks() as demo:
-  gr.Markdown('''# Community demo for Stable Video Diffusion - Img2Vid - XT ([model](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt), [paper](https://stability.ai/research/stable-video-diffusion-scaling-latent-video-diffusion-models-to-large-datasets), [stability's ui waitlist](https://stability.ai/contact))
+  #gr.Markdown('''# Community demo for Stable Video Diffusion - Img2Vid - XT ([model](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt), [paper](https://stability.ai/research/stable-video-diffusion-scaling-latent-video-diffusion-models-to-large-datasets), [stability's ui waitlist](https://stability.ai/contact))
 #### Research release ([_non-commercial_](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/blob/main/LICENSE)): generate `4s` vid from a single image at (`25 frames` at `6 fps`). this demo uses [🧨 diffusers for low VRAM and fast generation](https://huggingface.co/docs/diffusers/main/en/using-diffusers/svd).
-  ''')
+  #''')
   with gr.Row():
     with gr.Column():
         image = gr.Image(label="Upload your image", type="pil")
@@ -95,9 +97,8 @@ with gr.Blocks() as demo:
       fps_id = gr.Slider(label="Frames per second", info="The length of your video in seconds will be 25/fps", value=6, minimum=5, maximum=30)
       
   image.upload(fn=resize_image, inputs=image, outputs=image, queue=False)
-  generate_btn.click(fn=sample, inputs=[image, seed, randomize_seed, motion_bucket_id, fps_id], outputs=[video, seed], api_name="video")
-
+  generate_btn.click(fn=sample, inputs=[image, seed, randomize_seed, motion_bucket_id, fps_id], outputs=[video, seed], api_name="video",)# inputs=image, outputs=[video, seed], fn=sample, cache_examples=True,)
 
 if __name__ == "__main__":
     demo.queue(max_size=20, api_open=False)
-    demo.launch(show_api=False)
+    demo.launch(share=True, show_api=False)
