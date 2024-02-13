@@ -54,7 +54,7 @@ def sample(
     
     return video_path, seed
 
-def resize_image(image, output_size=(1024, 576)):
+def resize_image(image, output_size=(768, 384)):
     # Calculate aspect ratios
     target_aspect = output_size[0] / output_size[1]  # Aspect ratio of the desired size
     image_aspect = image.width / image.height  # Aspect ratio of the original image
