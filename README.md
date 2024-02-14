@@ -1,5 +1,5 @@
 ---
-title: SDXT-1.1
+title: SVD XT 1.1
 emoji: ⚡
 colorFrom: green
 colorTo: indigo
