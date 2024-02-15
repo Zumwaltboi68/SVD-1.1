@@ -17,7 +17,7 @@ torch.cuda.empty_cache()
 def genie(src_image):
     torch.cuda.empty_cache()
     if image.mode == "RGBA":
-        image = image.convert("RGB")
+        src_image = image.convert("RGB")
     frames = pipe(image=src_image, decode_chunk_size=3).frames[0]
     export_to_video(frames, fps=6)
     torch.cuda.empty_cache()
