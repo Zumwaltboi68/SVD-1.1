@@ -15,7 +15,9 @@ pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 torch.cuda.empty_cache()
 
 def genie(src_image):
+    torch.cuda.empty_cache()
     frames = pipe(image=src_image).images[0]
+    torch.cuda.empty_cache()
     return frames
 
 gr.Interface(fn=genie, inputs=gr.Image(type="pil"), outputs=gr.Video()).launch(debug=True, max_threads=80)
