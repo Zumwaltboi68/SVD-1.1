@@ -45,7 +45,7 @@ def sample(
     base_count = len(glob(os.path.join(output_folder, "*.mp4")))
     video_path = os.path.join(output_folder, f"{base_count:06d}.mp4")
 
-    frames = pipe(image, decode_chunk_size=decoding_t, generator=generator, motion_bucket_id=motion_bucket_id, noise_aug_strength=0.1, num_frames=25).frames[0]
+    frames = pipe(image, decode_chunk_size=decoding_t, generator=generator, motion_bucket_id=motion_bucket_id, noise_aug_strength=0.9, num_frames=25).frames[0]
     export_to_video(frames, video_path, fps=fps_id)
     torch.manual_seed(seed)
     torch.cuda.empty_cache()
@@ -92,8 +92,8 @@ with gr.Blocks() as demo:
   with gr.Accordion("Advanced options", open=False):
       seed = gr.Slider(label="Seed", value=42, randomize=True, minimum=0, maximum=max_64_bit_int, step=1)
       randomize_seed = gr.Checkbox(label="Randomize seed", value=True)
-      motion_bucket_id = gr.Slider(label="Motion bucket id", info="Controls how much motion to add/remove from the image", value=127, minimum=1, maximum=255)
-      fps_id = gr.Slider(label="Frames per second", info="The length of your video in seconds will be 25/fps", value=6, minimum=5, maximum=30)
+      motion_bucket_id = gr.Slider(label="Motion bucket id", info="Controls how much motion to add/remove from the image", value=60, minimum=1, maximum=255)
+      fps_id = gr.Slider(label="Frames per second", info="The length of your video in seconds will be 25/fps", value=5, minimum=5, maximum=30)
       
   image.upload(fn=resize_image, inputs=image, outputs=image, queue=False)
   generate_btn.click(fn=sample, inputs=[image, seed, randomize_seed, motion_bucket_id, fps_id], outputs=[video, seed], api_name="video")
