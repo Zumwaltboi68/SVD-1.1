@@ -14,7 +14,7 @@ pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-di
 pipe.to("cuda")
 pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 torch.cuda.empty_cache()
-
+return video_path
 output_folder = "outputs"
 os.makedirs(output_folder, exist_ok=True)
 base_count = len(glob(os.path.join(output_folder, "*.mp4")))
