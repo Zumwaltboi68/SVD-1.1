@@ -23,4 +23,4 @@ def genie(image):
     torch.cuda.empty_cache()
     return frames
 
-gr.Interface(fn=genie, inputs=gr.Image(type="pil"), outputs=gr.Video()).launch(debug=True, max_threads=80)
+gr.Interface(fn=genie, inputs=gr.Image(type="numpy"), outputs=gr.Video()).launch(debug=True, max_threads=80)
