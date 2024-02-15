@@ -14,12 +14,13 @@ pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-di
 pipe.to("cuda")
 pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 torch.cuda.empty_cache()
-return video_path
+
 output_folder = "outputs"
 os.makedirs(output_folder, exist_ok=True)
 base_count = len(glob(os.path.join(output_folder, "*.mp4")))
 video_path = os.path.join(output_folder, f"{base_count:06d}.mp4")
-    
+return video_path    
+
 def genie(image):
     torch.cuda.empty_cache()
     if image.mode == "RGBA":
