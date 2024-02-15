@@ -16,7 +16,7 @@ torch.cuda.empty_cache()
 
 def genie(src_image):
     torch.cuda.empty_cache()
-    frames = pipe(image=src_image, decode_chunk_size=3).images[0]
+    frames = pipe(image=src_image, decode_chunk_size=3).frames[0]
     torch.cuda.empty_cache()
     return frames
 
