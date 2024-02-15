@@ -14,9 +14,7 @@ pipe = StableVideoDiffusionPipeline.from_pretrained("stabilityai/stable-video-di
 pipe.to("cuda")
 pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
 torch.cuda.empty_cache()
-
-return video_path    
-
+  
 def genie(image):
     torch.cuda.empty_cache()
     if image.mode == "RGBA":
