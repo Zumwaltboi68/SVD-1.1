@@ -11,3 +11,7 @@ license: mit
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+
+Usage: **pip install -r requirements.txt**
+Run: **python app.py**
