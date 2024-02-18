@@ -83,7 +83,7 @@ def resize_image(image, output_size=(1024, 576)):
     return cropped_image
 
 with gr.Blocks() as demo:
-  
+  gr.Markdown("Stable Video Diffusion (SVD) 1.1 Image-to-Video is a diffusion model that takes in a still image as a conditioning frame, and generates a video from it. https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt-1-1 <br> This model was trained to generate 25 frames at resolution 1024x576 given a context frame of the same size, finetuned from SVD Image-to-Video [25 frames].")
   with gr.Row():
     with gr.Column():
         image = gr.Image(label="Upload your image", type="pil")
