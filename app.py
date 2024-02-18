@@ -94,7 +94,7 @@ with gr.Blocks() as demo:
       randomize_seed = gr.Checkbox(label="Randomize seed", value=True)
       motion_bucket_id = gr.Slider(label="Motion bucket id", info="Controls how much motion to add/remove from the image", value=60, minimum=1, maximum=255)
       fps_id = gr.Slider(label="Frames per second", info="The length of your video in seconds will be 25/fps", value=5, minimum=5, maximum=30)
-      
+  gr.Markdown("If You Enjoyed this Demo and would like to Donate, you can send any amount to any of these Wallets. <br><br>BTC: bc1qzdm9j73mj8ucwwtsjx4x4ylyfvr6kp7svzjn84 <br>BTC2: 3LWRoKYx6bCLnUrKEdnPo3FCSPQUSFDjFP <br>DOGE: DK6LRc4gfefdCTRk9xPD239N31jh9GjKez <br>SHIB (BEP20): 0xbE8f2f3B71DFEB84E5F7E3aae1909d60658aB891 <br>PayPal: https://www.paypal.me/ManjushriBodhisattva <br>ETH: 0xbE8f2f3B71DFEB84E5F7E3aae1909d60658aB891 <br><br>Code Monkey: <a href=\"https://huggingface.co/Manjushri\">Manjushri</a>")      
   image.upload(fn=resize_image, inputs=image, outputs=image, queue=False)
   generate_btn.click(fn=sample, inputs=[image, seed, randomize_seed, motion_bucket_id, fps_id], outputs=[video, seed], api_name="video")
   
